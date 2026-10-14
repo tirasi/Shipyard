@@ -1,0 +1,22 @@
+services:
+  traefik:
+    image: traefik:v3.6
+    container_name: shipyard-traefik
+    restart: unless-stopped
+    command:
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--providers.docker.network=shipyard"
+      - "--entrypoints.web.address=:80"
+    ports:
+      - "80:80"
+      - "8081:8080"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+    networks:
+      - shipyard
+
+networks:
+  shipyard:
+    external: true
